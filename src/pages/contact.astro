@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { API_BASE_URL } from "../config";
 ---
 <Layout
   title="Contact"
@@ -19,10 +20,9 @@ import Layout from "../layouts/Layout.astro";
 
   <section class="px-6 pb-24">
     <div class="mx-auto max-w-2xl">
-      {/* TODO: wire this form up to a real backend (Formspree, Resend, or our own /api/contact endpoint). Currently the form is non-functional. */}
       <form
-        action="#"
-        method="post"
+        id="contact-form"
+        data-endpoint={`${API_BASE_URL.replace(/\/$/, "")}/api/public/contact`}
         class="space-y-5 rounded-2xl border border-ink/10 bg-ink/[0.02] p-6 md:p-8"
         novalidate
       >
@@ -33,6 +33,7 @@ import Layout from "../layouts/Layout.astro";
               type="text"
               name="name"
               required
+              maxlength="120"
               class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
               placeholder="Your name"
             />
@@ -43,6 +44,7 @@ import Layout from "../layouts/Layout.astro";
               type="email"
               name="email"
               required
+              maxlength="254"
               class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
               placeholder="you@example.com"
             />
@@ -53,6 +55,7 @@ import Layout from "../layouts/Layout.astro";
           <input
             type="text"
             name="roster"
+            maxlength="120"
             class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
             placeholder="e.g. 14 athletes"
           />
@@ -63,18 +66,98 @@ import Layout from "../layouts/Layout.astro";
             name="message"
             rows="5"
             required
+            maxlength="5000"
             class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
             placeholder="What's on your mind?"
           ></textarea>
         </label>
-        <button
-          type="submit"
-          class="inline-block rounded-full bg-ink px-5 py-3 text-sm font-medium text-bg transition-colors hover:bg-ink/90"
-        >Send</button>
-        <p class="text-xs text-ink/50">
-          Submissions aren't wired up yet \u2014 we'll connect this to a backend before launch.
-        </p>
+
+        {/* Honeypot — real browsers leave this blank; bots fill it. Hidden from
+            humans and screen readers via aria-hidden + tabindex. */}
+        <div class="hidden" aria-hidden="true">
+          <label>
+            Company name
+            <input
+              type="text"
+              name="companyName"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <button
+            type="submit"
+            id="contact-submit"
+            class="inline-block rounded-full bg-ink px-5 py-3 text-sm font-medium text-bg transition-colors hover:bg-ink/90 disabled:opacity-60"
+          >Send</button>
+          <p
+            id="contact-status"
+            class="text-sm text-ink/60"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </div>
       </form>
     </div>
   </section>
+
+  <script>
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+    const status = document.getElementById("contact-status");
+    if (form && submitBtn && status) {
+      const endpoint = form.dataset.endpoint || "";
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const payload = {
+          name: String(data.get("name") || ""),
+          email: String(data.get("email") || ""),
+          roster: String(data.get("roster") || ""),
+          message: String(data.get("message") || ""),
+          companyName: String(data.get("companyName") || ""),
+        };
+        if (!payload.name.trim() || !payload.email.trim() || !payload.message.trim()) {
+          status.textContent = "Please fill in your name, email, and a message.";
+          status.className = "text-sm text-red-600";
+          return;
+        }
+        submitBtn.disabled = true;
+        const originalLabel = submitBtn.textContent;
+        submitBtn.textContent = "Sending\u2026";
+        status.textContent = "";
+        status.className = "text-sm text-ink/60";
+        try {
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (res.ok) {
+            form.reset();
+            status.textContent = "Thanks \u2014 your message is in. We'll be in touch soon.";
+            status.className = "text-sm text-emerald-700";
+          } else {
+            let detail = "";
+            try {
+              const json = await res.json();
+              if (json && typeof json.error === "string") detail = json.error;
+            } catch {}
+            status.textContent = detail
+              ? `Couldn't send: ${detail}. Please try again.`
+              : "Couldn't send right now. Please try again in a moment.";
+            status.className = "text-sm text-red-600";
+          }
+        } catch {
+          status.textContent = "Network error. Please check your connection and try again.";
+          status.className = "text-sm text-red-600";
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        }
+      });
+    }
+  </script>
 </Layout>

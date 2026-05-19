@@ -2,6 +2,10 @@ export const APP_URL =
   (import.meta.env.PUBLIC_APP_URL as string | undefined) ??
   "https://app.deloadapp.io";
 
+export const API_BASE_URL =
+  (import.meta.env.PUBLIC_API_BASE_URL as string | undefined) ??
+  "https://app.deloadapp.io";
+
 export const SITE_NAME = "deload";
 
 export const SITE_DESCRIPTION =
