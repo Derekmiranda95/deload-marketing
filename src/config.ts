@@ -6,6 +6,12 @@ export const API_BASE_URL =
   (import.meta.env.PUBLIC_API_BASE_URL as string | undefined) ??
   "https://app.deloadapp.io";
 
+// Cloudflare Turnstile site key for the contact form's invisible
+// challenge. When unset, the form skips Turnstile entirely and relies
+// on the honeypot + per-IP rate limit on the server (Task #1877).
+export const TURNSTILE_SITE_KEY =
+  (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? "";
+
 export const SITE_NAME = "deload";
 
 export const SITE_DESCRIPTION =

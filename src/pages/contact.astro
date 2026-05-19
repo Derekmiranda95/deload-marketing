@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL, TURNSTILE_SITE_KEY } from "../config";
 ---
 <Layout
   title="Contact"
@@ -23,6 +23,7 @@ import { API_BASE_URL } from "../config";
       <form
         id="contact-form"
         data-endpoint={`${API_BASE_URL.replace(/\/$/, "")}/api/public/contact`}
+        data-turnstile-sitekey={TURNSTILE_SITE_KEY}
         class="space-y-5 rounded-2xl border border-ink/10 bg-ink/[0.02] p-6 md:p-8"
         novalidate
       >
@@ -86,6 +87,13 @@ import { API_BASE_URL } from "../config";
           </label>
         </div>
 
+        {/* Cloudflare Turnstile invisible/managed widget. The script
+            mounts it here and we read its token via turnstile.getResponse
+            before submit. Rendered only when a site key is configured;
+            otherwise the form still submits and the server falls back to
+            honeypot + per-IP rate limit (Task #1877). */}
+        <div id="contact-turnstile" class="cf-turnstile" aria-hidden="true"></div>
+
         <div class="flex flex-wrap items-center gap-4">
           <button
             type="submit"
@@ -104,20 +112,92 @@ import { API_BASE_URL } from "../config";
   </section>
 
   <script>
+    interface TurnstileApi {
+      render: (
+        container: HTMLElement | string,
+        options: {
+          sitekey: string;
+          size?: "invisible" | "compact" | "normal" | "flexible";
+          appearance?: "always" | "execute" | "interaction-only";
+          retry?: "auto" | "never";
+          "refresh-expired"?: "auto" | "manual" | "never";
+        },
+      ) => string;
+      getResponse: (widgetId?: string) => string | undefined;
+      reset: (widgetId?: string) => void;
+      execute: (widgetId?: string) => void;
+    }
+    interface WindowWithTurnstile extends Window {
+      turnstile?: TurnstileApi;
+    }
+    const w = window as WindowWithTurnstile;
+
     const form = document.getElementById("contact-form") as HTMLFormElement | null;
     const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
     const status = document.getElementById("contact-status");
+    const turnstileEl = document.getElementById("contact-turnstile") as HTMLElement | null;
+
+    // Mount the Turnstile widget (invisible/managed) when a site key is
+    // configured. We load the script lazily so pages without a key
+    // never hit Cloudflare. Task #1877.
+    let turnstileWidgetId: string | undefined;
+    const turnstileSiteKey = (form?.dataset.turnstileSitekey || "").trim();
+    if (form && turnstileEl && turnstileSiteKey) {
+      const ensureScript = (): Promise<void> => new Promise((resolve) => {
+        if (w.turnstile) { resolve(); return; }
+        const existing = document.querySelector(
+          'script[data-deload-turnstile="1"]',
+        ) as HTMLScriptElement | null;
+        if (existing) {
+          existing.addEventListener("load", () => resolve(), { once: true });
+          return;
+        }
+        const s = document.createElement("script");
+        s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        s.async = true;
+        s.defer = true;
+        s.dataset.deloadTurnstile = "1";
+        s.addEventListener("load", () => resolve(), { once: true });
+        document.head.appendChild(s);
+      });
+      ensureScript().then(() => {
+        if (!w.turnstile) return;
+        turnstileWidgetId = w.turnstile.render(turnstileEl, {
+          sitekey: turnstileSiteKey,
+          size: "invisible",
+          appearance: "interaction-only",
+          retry: "auto",
+          "refresh-expired": "auto",
+        });
+      });
+    }
+
     if (form && submitBtn && status) {
       const endpoint = form.dataset.endpoint || "";
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         const data = new FormData(form);
+        let turnstileToken = "";
+        if (turnstileSiteKey && w.turnstile) {
+          turnstileToken = w.turnstile.getResponse(turnstileWidgetId) || "";
+          if (!turnstileToken) {
+            // Force the invisible challenge to run, then read again.
+            try { w.turnstile.execute(turnstileWidgetId); } catch {}
+            // Poll briefly for completion (managed widgets resolve fast).
+            const deadline = Date.now() + 6000;
+            while (Date.now() < deadline && !turnstileToken) {
+              await new Promise((r) => setTimeout(r, 150));
+              turnstileToken = w.turnstile.getResponse(turnstileWidgetId) || "";
+            }
+          }
+        }
         const payload = {
           name: String(data.get("name") || ""),
           email: String(data.get("email") || ""),
           roster: String(data.get("roster") || ""),
           message: String(data.get("message") || ""),
           companyName: String(data.get("companyName") || ""),
+          turnstileToken,
         };
         if (!payload.name.trim() || !payload.email.trim() || !payload.message.trim()) {
           status.textContent = "Please fill in your name, email, and a message.";
