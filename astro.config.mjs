@@ -16,7 +16,7 @@ export default defineConfig({
   site,
   base,
   trailingSlash: "ignore",
-  server: { port, host: "0.0.0.0" },
+  server: { port, host: "0.0.0.0", allowedHosts: true },
   integrations: [tailwind({ applyBaseStyles: true }), sitemap(), mdx()],
   vite: {
     server: { allowedHosts: true },
