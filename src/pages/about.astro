@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout
+  title="About"
+  description="deload is built by people who've written programs at 11pm and rewritten them by 7am. We're trying to give coaches their time back without taking the craft out of coaching."
+>
+  <section class="px-6 pt-20 pb-12 md:pt-28">
+    <div class="mx-auto max-w-container">
+      <p class="text-sm uppercase tracking-[0.18em] text-ink/50">About</p>
+      <h1 class="mt-4 max-w-3xl text-balance text-4xl font-medium leading-[1.1] tracking-tight md:text-5xl">
+        We're trying to give coaches their time back without taking the craft out of coaching.
+      </h1>
+    </div>
+  </section>
+
+  <section class="px-6 pb-24">
+    <div class="mx-auto grid max-w-container gap-12 md:grid-cols-[1fr_1.4fr]">
+      <div>
+        <p class="text-xs uppercase tracking-[0.18em] text-clay">Founder</p>
+        <p class="mt-3 text-lg text-ink/75">
+          {/* TODO: replace with the real founder bio and a portrait once we're ready to attach a name. */}
+          A short bio of the founder lives here \u2014 how they ended up writing programs every Sunday, the moment they realized the spreadsheet had to go, and why they decided to build deload instead of using one of the existing tools.
+        </p>
+      </div>
+      <div class="space-y-6 text-lg text-ink/80">
+        <p>
+          deload started the way most tools for coaches start: as a frustration with our own programming workflow. Writing the first draft of a block is the easy part \u2014 it's the rewrites, the messages at 9pm, and the &ldquo;what am I doing today?&rdquo; texts that quietly eat the week.
+        </p>
+        <p>
+          We didn't want a workout tracker. We didn't want an AI that hallucinates set/rep schemes. We wanted a calm, well-built tool that writes the way we write, edits the way we'd edit, and stays out of the way the rest of the time.
+        </p>
+        <p>
+          The product is opinionated on purpose. It's built for coaches who care about the work \u2014 not for people who want a marketplace.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

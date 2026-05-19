@@ -1,0 +1,80 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout
+  title="Contact"
+  description="Questions, feedback, or want a look at the private beta? Send us a note."
+>
+  <section class="px-6 pt-20 pb-12 md:pt-28">
+    <div class="mx-auto max-w-container">
+      <p class="text-sm uppercase tracking-[0.18em] text-ink/50">Contact</p>
+      <h1 class="mt-4 max-w-3xl text-balance text-4xl font-medium leading-[1.1] tracking-tight md:text-5xl">
+        Tell us about your roster.
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg text-ink/70">
+        Whether you're curious about the beta or you've got a feature in mind, drop a line. We read everything.
+      </p>
+    </div>
+  </section>
+
+  <section class="px-6 pb-24">
+    <div class="mx-auto max-w-2xl">
+      {/* TODO: wire this form up to a real backend (Formspree, Resend, or our own /api/contact endpoint). Currently the form is non-functional. */}
+      <form
+        action="#"
+        method="post"
+        class="space-y-5 rounded-2xl border border-ink/10 bg-ink/[0.02] p-6 md:p-8"
+        novalidate
+      >
+        <div class="grid gap-5 md:grid-cols-2">
+          <label class="block">
+            <span class="text-sm font-medium text-ink">Name</span>
+            <input
+              type="text"
+              name="name"
+              required
+              class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
+              placeholder="Your name"
+            />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium text-ink">Email</span>
+            <input
+              type="email"
+              name="email"
+              required
+              class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
+              placeholder="you@example.com"
+            />
+          </label>
+        </div>
+        <label class="block">
+          <span class="text-sm font-medium text-ink">Roster size (optional)</span>
+          <input
+            type="text"
+            name="roster"
+            class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
+            placeholder="e.g. 14 athletes"
+          />
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium text-ink">Message</span>
+          <textarea
+            name="message"
+            rows="5"
+            required
+            class="mt-1.5 block w-full rounded-lg border border-ink/15 bg-bg px-3 py-2.5 text-ink placeholder:text-ink/40 focus:border-ink focus:outline-none"
+            placeholder="What's on your mind?"
+          ></textarea>
+        </label>
+        <button
+          type="submit"
+          class="inline-block rounded-full bg-ink px-5 py-3 text-sm font-medium text-bg transition-colors hover:bg-ink/90"
+        >Send</button>
+        <p class="text-xs text-ink/50">
+          Submissions aren't wired up yet \u2014 we'll connect this to a backend before launch.
+        </p>
+      </form>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,37 @@
+---
+import { APP_URL, NAV_LINKS } from "../config";
+import Wordmark from "./Wordmark.astro";
+
+const pathname = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
+const stripped = pathname.replace(base, "/").replace(/\/+$/, "") || "/";
+
+function isActive(href: string) {
+  return stripped === href;
+}
+---
+<header class="sticky top-0 z-40 border-b border-ink/10 bg-bg/85 backdrop-blur">
+  <div class="mx-auto flex max-w-container items-center justify-between px-6 py-4">
+    <a href={base} class="text-ink hover:opacity-80" aria-label="deload home">
+      <Wordmark class="text-base" />
+    </a>
+    <nav class="hidden items-center gap-7 text-sm text-ink/70 md:flex">
+      {NAV_LINKS.map((link) => (
+        <a
+          href={`${base.replace(/\/$/, "")}${link.href}`}
+          class={`transition-colors hover:text-ink ${isActive(link.href) ? "text-ink" : ""}`}
+        >{link.label}</a>
+      ))}
+    </nav>
+    <div class="flex items-center gap-2">
+      <a
+        href={APP_URL}
+        class="hidden rounded-full px-3 py-1.5 text-sm text-ink/70 transition-colors hover:text-ink sm:inline-block"
+      >Log in</a>
+      <a
+        href={APP_URL}
+        class="inline-block rounded-full bg-ink px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-ink/90"
+      >Start free</a>
+    </div>
+  </div>
+</header>

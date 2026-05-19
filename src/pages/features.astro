@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { APP_URL } from "../config";
+
+const sections = [
+  {
+    eyebrow: "Programming",
+    title: "Block-aware training in your voice.",
+    body: "deload writes mesocycles, deloads, and peaks the way you'd write them \u2014 RPE, RIR, and %1RM living inside the same block. Powerlifting, weightlifting, hypertrophy, sport-specific: it's all in scope.",
+    points: [
+      "Periodization that respects the athlete in front of you.",
+      "Mix intensity schemes inside one block without breaking the math.",
+      "Templates you've used before become the next program's starting point.",
+    ],
+  },
+  {
+    eyebrow: "Edits",
+    title: "Plain-English edits that ripple.",
+    body: "Tell it the constraint \u2014 a tweaked back, a missed week, a meet that just moved \u2014 and it rewrites the affected weeks. The rest of the block stays exactly where you left it.",
+    points: [
+      "Edit any session inline; downstream weeks adjust to match.",
+      "Swap exercises, move sessions, or trim volume without re-writing the block.",
+      "Every change is reversible \u2014 you stay the coach of record.",
+    ],
+  },
+  {
+    eyebrow: "Athlete experience",
+    title: "An app athletes actually open.",
+    body: "Clean, quiet, and built around the next set \u2014 not gamified streaks. Athletes see today's session, log it in seconds, and message you when something's off.",
+    points: [
+      "Mobile-first session view with inline notes and feel.",
+      "Quick check-ins land in your inbox, not buried in a feed.",
+      "PRs and trends surface where they help the conversation.",
+    ],
+  },
+];
+---
+<Layout
+  title="Features"
+  description="Block-aware programming, plain-English edits, and an athlete app that gets opened. The features that make deload feel like a coach, not a workout tracker."
+>
+  <section class="px-6 pt-20 pb-12 md:pt-28">
+    <div class="mx-auto max-w-container">
+      <p class="text-sm uppercase tracking-[0.18em] text-ink/50">Features</p>
+      <h1 class="mt-4 max-w-3xl text-balance text-4xl font-medium leading-[1.1] tracking-tight md:text-5xl">
+        The pieces that quietly do the job of a programming assistant.
+      </h1>
+    </div>
+  </section>
+
+  <div class="divide-y divide-ink/10 border-y border-ink/10">
+    {sections.map((s) => (
+      <section class="px-6 py-20 md:py-24">
+        <div class="mx-auto grid max-w-container gap-12 md:grid-cols-[1fr_1.2fr]">
+          <div>
+            <p class="text-xs uppercase tracking-[0.18em] text-clay">{s.eyebrow}</p>
+            <h2 class="mt-3 text-3xl font-medium tracking-tight md:text-4xl">{s.title}</h2>
+          </div>
+          <div>
+            <p class="text-lg text-ink/75">{s.body}</p>
+            <ul class="mt-6 space-y-3 text-ink/80">
+              {s.points.map((p) => (
+                <li class="flex gap-3">
+                  <span aria-hidden="true" class="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-sage" />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <section class="px-6 py-24 md:py-28">
+    <div class="mx-auto max-w-container text-center">
+      <h2 class="mx-auto max-w-2xl text-balance text-3xl font-medium tracking-tight md:text-4xl">
+        Try it on a real roster.
+      </h2>
+      <a
+        href={APP_URL}
+        class="mt-7 inline-block rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition-colors hover:bg-ink/90"
+      >Start free</a>
+    </div>
+  </section>
+</Layout>

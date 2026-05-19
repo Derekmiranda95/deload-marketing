@@ -1,0 +1,27 @@
+---
+import Wordmark from "./Wordmark.astro";
+import { NAV_LINKS } from "../config";
+
+const base = import.meta.env.BASE_URL;
+const year = new Date().getFullYear();
+const legal = [
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+];
+---
+<footer class="border-t border-ink/10 bg-bg">
+  <div class="mx-auto flex max-w-container flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
+    <div class="flex items-center gap-3 text-ink/70">
+      <Wordmark class="text-sm text-ink" />
+      <span class="text-xs">&copy; {year}</span>
+    </div>
+    <nav class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ink/60">
+      {NAV_LINKS.map((l) => (
+        <a class="hover:text-ink" href={`${base.replace(/\/$/, "")}${l.href}`}>{l.label}</a>
+      ))}
+      {legal.map((l) => (
+        <a class="hover:text-ink" href={`${base.replace(/\/$/, "")}${l.href}`}>{l.label}</a>
+      ))}
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,25 @@
+previewPath = "/deload-marketing/"
+title = "Deload Marketing"
+
+[[services]]
+name = "web"
+paths = [ "/deload-marketing/" ]
+localPort = 4321
+
+[services.development]
+run = "pnpm --filter @workspace/deload-marketing run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/deload-marketing", "run", "build" ]
+publicDir = "artifacts/deload-marketing/dist"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "4321"
+BASE_PATH = "/deload-marketing/"
+PUBLIC_APP_URL = "https://app.deloadapp.io"
+PUBLIC_SITE_URL = "https://deloadapp.io"
