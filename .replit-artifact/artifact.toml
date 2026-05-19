@@ -21,5 +21,5 @@ to = "/index.html"
 [services.env]
 PORT = "4321"
 BASE_PATH = "/deload-marketing/"
-PUBLIC_APP_URL = "https://app.deloadapp.io"
+PUBLIC_APP_URL = "/coach-ui"
 PUBLIC_SITE_URL = "https://deloadapp.io"

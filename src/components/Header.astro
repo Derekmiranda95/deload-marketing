@@ -1,5 +1,5 @@
 ---
-import { APP_URL, NAV_LINKS } from "../config";
+import { SIGN_IN_URL, SIGN_UP_URL, NAV_LINKS } from "../config";
 import Wordmark from "./Wordmark.astro";
 
 const pathname = Astro.url.pathname;
@@ -25,11 +25,11 @@ function isActive(href: string) {
     </nav>
     <div class="flex items-center gap-2">
       <a
-        href={APP_URL}
+        href={SIGN_IN_URL}
         class="hidden rounded-full px-3 py-1.5 text-sm text-ink/70 transition-colors hover:text-ink sm:inline-block"
       >Log in</a>
       <a
-        href={APP_URL}
+        href={SIGN_UP_URL}
         class="inline-block rounded-full bg-ink px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-ink/90"
       >Start free</a>
     </div>

@@ -1,55 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { APP_URL } from "../config";
-
-const sections = [
-  {
-    eyebrow: "Programming",
-    title: "Block-aware training in your voice.",
-    body: "deload writes mesocycles, deloads, and peaks the way you'd write them \u2014 RPE, RIR, and %1RM living inside the same block. Powerlifting, weightlifting, hypertrophy, sport-specific: it's all in scope.",
-    points: [
-      "Periodization that respects the athlete in front of you.",
-      "Mix intensity schemes inside one block without breaking the math.",
-      "Templates you've used before become the next program's starting point.",
-    ],
-  },
-  {
-    eyebrow: "Edits",
-    title: "Plain-English edits that ripple.",
-    body: "Tell it the constraint \u2014 a tweaked back, a missed week, a meet that just moved \u2014 and it rewrites the affected weeks. The rest of the block stays exactly where you left it.",
-    points: [
-      "Edit any session inline; downstream weeks adjust to match.",
-      "Swap exercises, move sessions, or trim volume without re-writing the block.",
-      "Every change is reversible \u2014 you stay the coach of record.",
-    ],
-  },
-  {
-    eyebrow: "Athlete experience",
-    title: "An app athletes actually open.",
-    body: "Clean, quiet, and built around the next set \u2014 not gamified streaks. Athletes see today's session, log it in seconds, and message you when something's off.",
-    points: [
-      "Mobile-first session view with inline notes and feel.",
-      "Quick check-ins land in your inbox, not buried in a feed.",
-      "PRs and trends surface where they help the conversation.",
-    ],
-  },
-];
+import { SIGN_UP_URL, featureGroups } from "../config";
 ---
 <Layout
   title="Features"
-  description="Block-aware programming, plain-English edits, and an athlete app that gets opened. The features that make deload feel like a coach, not a workout tracker."
+  description="Block-aware programming, plain-English edits, roster triage, an in-app messaging inbox, an athlete mobile app, and built-in billing. The whole job in one window."
 >
   <section class="px-6 pt-20 pb-12 md:pt-28">
     <div class="mx-auto max-w-container">
       <p class="text-sm uppercase tracking-[0.18em] text-ink/50">Features</p>
       <h1 class="mt-4 max-w-3xl text-balance text-4xl font-medium leading-[1.1] tracking-tight md:text-5xl">
-        The pieces that quietly do the job of a programming assistant.
+        Everything you'd cobble together &mdash; in one app, designed like one app.
       </h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink/70">
+        Programming, editing, roster triage, messaging, an athlete mobile app, team admin, and billing. All sharing the same data, so a change in one place doesn't strand the other.
+      </p>
     </div>
   </section>
 
   <div class="divide-y divide-ink/10 border-y border-ink/10">
-    {sections.map((s) => (
+    {featureGroups.map((s) => (
       <section class="px-6 py-20 md:py-24">
         <div class="mx-auto grid max-w-container gap-12 md:grid-cols-[1fr_1.2fr]">
           <div>
@@ -77,8 +47,11 @@ const sections = [
       <h2 class="mx-auto max-w-2xl text-balance text-3xl font-medium tracking-tight md:text-4xl">
         Try it on a real roster.
       </h2>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-ink/70">
+        Free during private beta. Create one athlete, generate one block, and see whether the voice is right.
+      </p>
       <a
-        href={APP_URL}
+        href={SIGN_UP_URL}
         class="mt-7 inline-block rounded-full bg-ink px-6 py-3 text-sm font-medium text-bg transition-colors hover:bg-ink/90"
       >Start free</a>
     </div>
