@@ -1,27 +1,108 @@
 ---
 import Wordmark from "./Wordmark.astro";
-import { NAV_LINKS } from "../config";
+import {
+  FEATURES,
+  BUSINESS_TYPES,
+  RESOURCES,
+  SIGN_IN_URL,
+  TRIAL_URL,
+} from "../config";
 
 const base = import.meta.env.BASE_URL;
+const root = base.replace(/\/$/, "");
+const link = (href: string) =>
+  href.startsWith("http") ? href : `${root}${href}`;
 const year = new Date().getFullYear();
+
+// Keep the footer feature list tight — the most marketable surfaces.
+const footerFeatures = FEATURES.filter((f) =>
+  ["ai-programming", "program-editing", "roster", "athlete-app", "scheduling", "billing"].includes(f.slug),
+);
+
+const company = [
+  { label: "Why we're different", href: "/why" },
+  { label: "deload Elevate", href: "/elevate" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
+  { label: "Book a demo", href: "/book-a-demo" },
+  { label: "Contact", href: "/contact" },
+];
+
 const legal = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
 ];
 ---
 <footer class="border-t border-ink/10 bg-bg">
-  <div class="mx-auto flex max-w-container flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
-    <div class="flex items-center gap-3 text-ink/70">
-      <Wordmark class="text-sm text-ink" />
-      <span class="text-xs">&copy; {year}</span>
+  <!-- CTA band -->
+  <div class="border-b border-ink/10">
+    <div class="mx-auto flex max-w-container flex-col items-start gap-6 px-6 py-12 md:flex-row md:items-center md:justify-between">
+      <p class="max-w-xl text-2xl font-medium tracking-tight text-ink md:text-3xl">
+        Give the programming, the roster, and the admin to one app.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href={TRIAL_URL} class="rounded-full bg-ink px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-bg transition-colors hover:bg-ink/90">Try for free</a>
+        <a href={link("/book-a-demo")} class="rounded-full border border-ink/20 px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition-colors hover:bg-ink/5">Book a demo</a>
+      </div>
     </div>
-    <nav class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ink/60">
-      {NAV_LINKS.map((l) => (
-        <a class="hover:text-ink" href={`${base.replace(/\/$/, "")}${l.href}`}>{l.label}</a>
-      ))}
-      {legal.map((l) => (
-        <a class="hover:text-ink" href={`${base.replace(/\/$/, "")}${l.href}`}>{l.label}</a>
-      ))}
-    </nav>
+  </div>
+
+  <!-- Link columns -->
+  <div class="mx-auto grid max-w-container grid-cols-2 gap-8 px-6 py-14 md:grid-cols-5">
+    <div class="col-span-2 md:col-span-1">
+      <a href={link("/")} aria-label="deload home"><Wordmark class="text-base text-ink" /></a>
+      <p class="mt-4 max-w-xs text-sm leading-relaxed text-ink/55">
+        The all-in-one AI coaching platform for coaches who write their own training.
+      </p>
+    </div>
+
+    <div>
+      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink/40">Features</p>
+      <ul class="space-y-2.5 text-sm text-ink/65">
+        {footerFeatures.map((f) => (
+          <li><a class="transition-colors hover:text-ink" href={link(`/features/${f.slug}`)}>{f.nav}</a></li>
+        ))}
+        <li><a class="transition-colors hover:text-ink" href={link("/features")}>All features</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink/40">Business types</p>
+      <ul class="space-y-2.5 text-sm text-ink/65">
+        {BUSINESS_TYPES.map((b) => (
+          <li><a class="transition-colors hover:text-ink" href={link(`/business-types/${b.slug}`)}>{b.nav}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink/40">Resources</p>
+      <ul class="space-y-2.5 text-sm text-ink/65">
+        {RESOURCES.map((r) => (
+          <li><a class="transition-colors hover:text-ink" href={link(`/resources/${r.slug}`)}>{r.nav}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink/40">Company</p>
+      <ul class="space-y-2.5 text-sm text-ink/65">
+        {company.map((c) => (
+          <li><a class="transition-colors hover:text-ink" href={link(c.href)}>{c.label}</a></li>
+        ))}
+        <li><a class="transition-colors hover:text-ink" href={SIGN_IN_URL}>Login</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-ink/10">
+    <div class="mx-auto flex max-w-container flex-col gap-3 px-6 py-6 text-xs text-ink/50 md:flex-row md:items-center md:justify-between">
+      <span>&copy; {year} deload. All rights reserved.</span>
+      <nav class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        {legal.map((l) => (
+          <a class="transition-colors hover:text-ink" href={link(l.href)}>{l.label}</a>
+        ))}
+      </nav>
+    </div>
   </div>
 </footer>

@@ -1,0 +1,44 @@
+---
+import { testimonials } from "../config";
+
+interface Props {
+  heading?: string;
+  // When there are no real testimonials yet, show a quiet placeholder instead
+  // of fabricating quotes. Set to false to hide the section entirely.
+  showPlaceholder?: boolean;
+}
+
+const { heading = "From coaches in the beta", showPlaceholder = true } = Astro.props;
+const hasReal = testimonials.length > 0;
+---
+{(hasReal || showPlaceholder) && (
+  <section class="border-t border-ink/10 px-6 py-20 md:py-28">
+    <div class="mx-auto max-w-container">
+      <h2 class="text-sm uppercase tracking-[0.18em] text-clay">{heading}</h2>
+
+      {hasReal ? (
+        <ul class="mt-10 grid gap-6 md:grid-cols-3">
+          {testimonials.map((t) => (
+            <li class="rounded-2xl border border-ink/10 bg-bg p-7">
+              <blockquote class="text-lg leading-snug text-ink">&ldquo;{t.quote}&rdquo;</blockquote>
+              <figcaption class="mt-5 text-sm text-ink/60">
+                <span class="font-medium text-ink/80">{t.name}</span> · {t.role}
+              </figcaption>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="mt-6 max-w-3xl">
+          <p class="text-2xl font-medium leading-snug tracking-tight text-ink md:text-3xl">
+            Real coach stories are on the way.
+          </p>
+          <p class="mt-4 text-lg text-ink/70">
+            We're in private beta and gathering feedback from the coaches using deload day to day.
+            Their words will live here soon — we'd rather leave this space honest than fill it with
+            quotes we made up.
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+)}

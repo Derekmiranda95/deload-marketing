@@ -7,30 +7,552 @@ export const API_BASE_URL =
   "https://app.deloadapp.io";
 
 const trimmedAppUrl = APP_URL.replace(/\/+$/, "");
+// "Try for free" starts the 7-day individual trial via the app sign-up flow.
 export const SIGN_IN_URL = `${trimmedAppUrl}/sign-in`;
 export const SIGN_UP_URL = `${trimmedAppUrl}/sign-up`;
+export const TRIAL_URL = SIGN_UP_URL;
 
 export const TURNSTILE_SITE_KEY =
   (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? "";
 
 export const SITE_NAME = "deload";
 
+// Repositioned per request: lead with "all-in-one" instead of "for serious coaches".
+export const SITE_TAGLINE = "The all-in-one AI coaching platform";
+
 export const SITE_DESCRIPTION =
-  "The AI coaching platform for coaches who write their own training. Generate block-aware programs, edit in plain English, run your roster, and ship the program straight to your athletes' phones \u2014 all in one place.";
+  "The all-in-one AI coaching platform for coaches who write their own training. Generate block-aware programs, edit in plain English, run your roster, bill your clients, and ship the program straight to your athletes' phones — all in one place.";
 
-export const NAV_LINKS = [
-  { label: "Features", href: "/features" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-] as const;
+// ---------------------------------------------------------------------------
+// Information architecture / navigation
+// ---------------------------------------------------------------------------
+//
+// The header renders three mega-menu dropdowns (Features, Business types,
+// Resources) plus two flat links (Why we're different, Pricing). All menu
+// data lives here so a single edit updates the header, the footer, and the
+// dynamically generated detail pages.
 
-// Three pillars used on the home page overview.
+export type FeatureStatus = "shipped" | "soon";
+
+export interface FeatureEntry {
+  slug: string;
+  nav: string; // label in the dropdown
+  status: FeatureStatus;
+  menuBlurb: string; // one line under the nav label
+  eyebrow: string;
+  title: string; // hero headline on the detail page
+  intro: string; // hero sub-paragraph
+  points: string[]; // capability bullets
+  flagship?: boolean;
+}
+
+// Grouped only for the dropdown's column layout (mirrors arketa's mega-menu).
+export const FEATURE_GROUPS: { heading: string; slugs: string[] }[] = [
+  { heading: "Programming", slugs: ["ai-programming", "program-editing", "populations"] },
+  { heading: "Roster", slugs: ["roster", "messaging", "check-ins"] },
+  { heading: "Athlete experience", slugs: ["athlete-app", "scheduling"] },
+  { heading: "Business", slugs: ["billing", "analytics", "team", "white-label"] },
+];
+
+export const FEATURES: FeatureEntry[] = [
+  {
+    slug: "ai-programming",
+    nav: "AI-assisted programming",
+    status: "shipped",
+    flagship: true,
+    menuBlurb: "Generate block-aware programs from a plain-English brief.",
+    eyebrow: "AI Programming",
+    title: "The first true AI exercise-programming agent.",
+    intro:
+      "Most “AI” fitness tools autocomplete a workout. deload runs a retrieval-augmented programming agent — it pulls the right protocol for the athlete in front of you into the prompt, then writes a block-aware program that respects periodization, intensity schemes, and the constraints you set. Not a template. Not a guess.",
+    points: [
+      "Generate a full first-draft block from a free-text brief — sport, level, equipment, training age, and constraints.",
+      "Retrieval-augmented generation (RAG): the agent grounds every program in a curated catalogue of real exercises, protocols, and reference programs — so it isn't inventing set/rep schemes.",
+      "Watch it work: live plan preview, per-block progress, and retrieval breadcrumbs as it writes.",
+      "Block-aware periodization — mesocycles, deloads, peaks, and taper logic that match the meet or goal date.",
+      "Mixed intensity prescription — RPE, RIR, and %1RM live inside the same block without breaking the math.",
+      "Population-aware: powerlifting, weightlifting, hypertrophy, sport-specific, masters, HRT-aware, and post-surgical programming.",
+    ],
+  },
+  {
+    slug: "program-editing",
+    nav: "Plain-English editing",
+    status: "shipped",
+    menuBlurb: "Edit any block in plain English; downstream weeks adjust.",
+    eyebrow: "Editing",
+    title: "Plain-English edits that ripple through the block.",
+    intro:
+      "Tell deload the constraint — a tweaked back, a missed week, a meet that just moved — and the affected weeks rewrite themselves. You see the before/after diff on every change, and the rest of the block stays exactly where you left it.",
+    points: [
+      "Chat-based refinement: “drop the deload,” “add RPE targets,” “make Wednesday upper-body focused.”",
+      "Before/after diffs and structural change summaries on every AI edit.",
+      "Inline grid for sets, reps, RPE, rest, tempo, and cues.",
+      "Same-family swaps and exercise substitutions that keep the intent intact.",
+      "Drag-and-drop to reorder days or move exercises between sessions.",
+      "Full edit history with one-click undo — you stay the coach of record.",
+    ],
+  },
+  {
+    slug: "populations",
+    nav: "Population-specific protocols",
+    status: "shipped",
+    menuBlurb: "Retrieval-backed protocols general tools quietly skip.",
+    eyebrow: "Populations",
+    title: "Programming that respects who's actually in front of you.",
+    intro:
+      "deload's retrieval layer pulls the right protocol into the prompt so the program isn't generic — including the populations most tools ignore.",
+    points: [
+      "Powerlifting, weightlifting, hypertrophy, and sport-specific prep.",
+      "Masters athletes, bone-density-aware programming, and fall-prevention GPP.",
+      "Trans athletes across the HRT spectrum (on / off / pre / post-surgical).",
+      "Hypogonadal men with or without TRT, including post-prostate-cancer cases.",
+    ],
+  },
+  {
+    slug: "roster",
+    nav: "Roster management",
+    status: "shipped",
+    menuBlurb: "Triage who needs attention this week — don't refresh it.",
+    eyebrow: "Roster",
+    title: "Triage the roster, don't refresh it.",
+    intro:
+      "A dashboard that surfaces who needs attention this week — new clients, drifting clients, recent PRs, high-RPE weeks, and the auto-adjustments that fired. Then deal with each athlete one click deep.",
+    points: [
+      "Roster dashboard with “Needs attention” triage and headshots.",
+      "Per-athlete history: PRs, RPE trends, check-ins, and edit log.",
+      "Automatic high-RPE advisories and target-divergence alerts.",
+      "Auto-adjustments that suggest swaps when an athlete logs pain or a brutal RPE — you accept or reject.",
+      "Per-athlete distance and load units — lbs / mi or kg / m — set once.",
+    ],
+  },
+  {
+    slug: "messaging",
+    nav: "In-app messaging",
+    status: "shipped",
+    menuBlurb: "Messaging that doesn't live in your texts.",
+    eyebrow: "Communication",
+    title: "Messaging that doesn't live in your texts.",
+    intro:
+      "Athletes message in-app, on web and mobile. You see the exact session that triggered the question. An AI assistant handles the easy ones so you can spend your replies on the real conversations.",
+    points: [
+      "In-app inbox tied to the specific session or week in question.",
+      "Welcome-note automation when an athlete first joins.",
+      "Athlete-side AI assistant for “what's my weight today?”-class questions.",
+      "Push notifications when you reply, so nothing gets lost.",
+    ],
+  },
+  {
+    slug: "check-ins",
+    nav: "Structured check-ins",
+    status: "shipped",
+    menuBlurb: "Structured check-ins that land back in your inbox.",
+    eyebrow: "Check-ins",
+    title: "The weekly check-in, structured and in one place.",
+    intro:
+      "Schedule check-in forms that reach athletes by in-app prompt or email, and catch readiness, pain, and off-target weeks before they become a problem.",
+    points: [
+      "Schedule recurring check-ins delivered in-app or by email.",
+      "Ask about readiness, pain, and adherence with custom forms.",
+      "Responses surface on the dashboard and can trigger org alerts.",
+      "Custom intake forms for onboarding new athletes.",
+    ],
+  },
+  {
+    slug: "athlete-app",
+    nav: "Athlete mobile app",
+    status: "shipped",
+    menuBlurb: "An app athletes actually open — iOS and Android.",
+    eyebrow: "Athlete experience",
+    title: "An app athletes actually open.",
+    intro:
+      "Clean, quiet, built around the next set — not gamified streaks. Athletes see today's session, log it in seconds, and message you when something's off. You stay the coach of record.",
+    points: [
+      "iOS and Android via the deload mobile app.",
+      "Fast in-gym logging: sets, reps, weight, RPE — with automatic PR detection.",
+      "Modality-aware fields for runs, rows, intervals, and more — not just barbell work.",
+      "Today's session up top, with warm-up, main work, accessories, and cool-down clearly laid out.",
+      "Auto-regulated targets based on the previous session's feel and performance, with a badge explaining why.",
+    ],
+  },
+  {
+    slug: "scheduling",
+    nav: "Scheduling & booking",
+    status: "shipped",
+    menuBlurb: "1-on-1 booking, availability, and an AI booking assistant.",
+    eyebrow: "Scheduling",
+    title: "Booking and scheduling, handled in the same app.",
+    intro:
+      "Set your availability, offer paid 1-on-1 sessions, and let athletes book the right slot — with an AI booking assistant that suggests times based on your availability and their history.",
+    points: [
+      "Offer paid 1-on-1 services with price, duration, and availability.",
+      "Athletes book into open slots and pay through Stripe.",
+      "AI booking assistant suggests slots from your availability and their history.",
+      "Multi-coach org schedule view with resource and capacity limits.",
+      "Smart auto-scheduling that places a whole week around recovery is coming soon.",
+    ],
+  },
+  {
+    slug: "billing",
+    nav: "Billing & payments",
+    status: "shipped",
+    menuBlurb: "Get paid without leaving the app.",
+    eyebrow: "Billing",
+    title: "Get paid without leaving the app.",
+    intro:
+      "Built-in Stripe billing for subscriptions, packages, and one-off sessions — so the money side stops being a second tool.",
+    points: [
+      "Stripe-backed subscriptions and athlete packages.",
+      "Charge for 1-on-1 sessions and services at the point of booking.",
+      "Self-serve invoicing for one-off charges.",
+      "Revenue and billing reports with CSV / PDF export.",
+    ],
+  },
+  {
+    slug: "analytics",
+    nav: "Analytics & reporting",
+    status: "shipped",
+    menuBlurb: "Dashboards and reports that surface what matters.",
+    eyebrow: "Analytics",
+    title: "The numbers that actually tell you something.",
+    intro:
+      "A configurable dashboard and a reports suite that turn logged sessions and bookings into decisions — without exporting to a spreadsheet.",
+    points: [
+      "Dashboard with triage ribbons: new clients, drifting clients, recent PRs, this week's auto-adjustments.",
+      "Schedule, revenue, billing, and resource-utilization reports.",
+      "CSV and PDF export on every report.",
+      "Org-level analytics: seats, invites, programs, sessions, and clients.",
+    ],
+  },
+  {
+    slug: "team",
+    nav: "Team & org",
+    status: "shipped",
+    menuBlurb: "Org-ready when you're not the only coach.",
+    eyebrow: "For the team",
+    title: "Org-ready when you're not the only coach.",
+    intro:
+      "Bring on additional coaches, share defaults across the team, and keep an audit trail of every admin action — with enterprise sign-on when you need it.",
+    points: [
+      "Invite coaches with owner / admin / coach / viewer roles.",
+      "Org-level defaults and a shared protocol library, with per-coach overrides.",
+      "Admin impersonation for support, every action audit-logged.",
+      "Enterprise SSO (SAML / OIDC) and SCIM provisioning.",
+    ],
+  },
+  {
+    slug: "white-label",
+    nav: "White labeling",
+    status: "shipped",
+    menuBlurb: "Your brand on the client-facing experience.",
+    eyebrow: "White labeling",
+    title: "Run the client experience under your own brand.",
+    intro:
+      "Put your studio's name, logo, and colours on the athlete-facing experience — branded portal, branded emails, and your own domain, running on deload's engine underneath.",
+    points: [
+      "Custom logo, colours, and email sender name across client-facing surfaces.",
+      "Map your own domain to the athlete portal with DNS validation.",
+      "Branded check-in and notification emails.",
+      "A fully branded native mobile app is coming soon.",
+    ],
+  },
+];
+
+export function getFeature(slug: string): FeatureEntry | undefined {
+  return FEATURES.find((f) => f.slug === slug);
+}
+
+// ---------------------------------------------------------------------------
+// Business types
+// ---------------------------------------------------------------------------
+
+export interface BusinessTypeEntry {
+  slug: string;
+  nav: string;
+  menuBlurb: string;
+  eyebrow: string;
+  title: string;
+  intro: string;
+  points: string[];
+  cta?: { label: string; href: string };
+}
+
+export const BUSINESS_TYPES: BusinessTypeEntry[] = [
+  {
+    slug: "individual",
+    nav: "Individual coach",
+    menuBlurb: "Solo coaches running their own roster.",
+    eyebrow: "Individual",
+    title: "Everything a solo coach needs, without the spreadsheet stack.",
+    intro:
+      "You write the programs, run the check-ins, and answer the texts. deload does the heavy lifting so one person can coach more athletes well — and still take Sunday night off.",
+    points: [
+      "AI-assisted programming so first drafts take minutes, not evenings.",
+      "One roster, one inbox, one athlete app — no tool-switching.",
+      "Built-in billing and booking so you get paid without a separate tool.",
+      "Start on the 7-day individual trial; upgrade when you're ready to scale.",
+    ],
+    cta: { label: "Start your 7-day trial", href: "" },
+  },
+  {
+    slug: "new-business",
+    nav: "New business (deload Elevate)",
+    menuBlurb: "Opening or just launched? Start here.",
+    eyebrow: "New business",
+    title: "Start your coaching business on the right foundation.",
+    intro:
+      "Whether you're going independent for the first time or opening your first studio, deload Elevate pairs the platform with guidance on getting the business itself off the ground.",
+    points: [
+      "Set up programming, billing, and your athlete app on day one.",
+      "Migrate an existing client list over from a spreadsheet or another tool.",
+      "Guidance on pricing, funding, and operations through deload Elevate.",
+    ],
+    cta: { label: "Explore deload Elevate", href: "/elevate" },
+  },
+  {
+    slug: "small-enterprise",
+    nav: "Small enterprise",
+    menuBlurb: "Small teams and single-location studios.",
+    eyebrow: "Small enterprise",
+    title: "A small team that coaches like a big one.",
+    intro:
+      "A handful of coaches, one shared standard. deload keeps everyone's programming consistent, every athlete accounted for, and the admin off your plate.",
+    points: [
+      "Invite your coaches and share org-level defaults.",
+      "One roster and schedule view across the whole team.",
+      "Shared protocol library so the bar stays high.",
+      "Per-coach voice preserved by the AI, even on shared standards.",
+    ],
+  },
+  {
+    slug: "large-enterprise",
+    nav: "Large enterprise & multi-location",
+    menuBlurb: "Multi-location studios and large rosters.",
+    eyebrow: "Large enterprise",
+    title: "Multi-location, multi-coach, one source of truth.",
+    intro:
+      "When you're running multiple locations and a large roster, consistency and oversight matter as much as speed. deload gives you org-wide defaults, an audit trail, enterprise SSO, and admin tooling that scales.",
+    points: [
+      "Org-level defaults with per-location and per-coach overrides.",
+      "Enterprise SSO (SAML / OIDC) and SCIM provisioning.",
+      "Admin impersonation for support, every action audit-logged.",
+      "Roster and schedule triage across every location from one dashboard.",
+    ],
+    cta: { label: "Book a demo", href: "/book-a-demo" },
+  },
+  {
+    slug: "white-label",
+    nav: "White labeling",
+    menuBlurb: "Your brand on the athlete experience.",
+    eyebrow: "White labeling",
+    title: "Run deload under your own brand.",
+    intro:
+      "For studios and platforms that want the deload engine behind their own brand — your name, logo, colours, and domain on the athlete portal and client emails today, with a fully branded native app on the way.",
+    points: [
+      "Branded athlete portal with custom logo and colours.",
+      "Your own domain on the client-facing surfaces.",
+      "Branded client emails and check-ins.",
+      "Branded native mobile app coming soon.",
+    ],
+    cta: { label: "Talk to us", href: "/book-a-demo" },
+  },
+];
+
+export function getBusinessType(slug: string): BusinessTypeEntry | undefined {
+  return BUSINESS_TYPES.find((b) => b.slug === slug);
+}
+
+// ---------------------------------------------------------------------------
+// Resources
+// ---------------------------------------------------------------------------
+
+export interface ResourceEntry {
+  slug: string;
+  nav: string;
+  menuBlurb: string;
+  eyebrow: string;
+  title: string;
+  intro: string;
+  body?: string[];
+  comingSoon?: boolean;
+}
+
+export const RESOURCES: ResourceEntry[] = [
+  {
+    slug: "starting-your-business",
+    nav: "Starting your business",
+    menuBlurb: "A playbook for launching your coaching business.",
+    eyebrow: "Guide",
+    title: "Starting your coaching business.",
+    intro:
+      "A practical guide to going from coaching on the side to running a business that pays you — pricing, packaging, your first clients, and the systems that keep it from eating your week.",
+    body: [
+      "Whether you're leaving a gym job or opening your first studio, the early decisions — how you price, how you package, how you get paid — set the ceiling on what comes next.",
+      "deload Elevate exists to help with exactly this. The platform handles the programming and admin; Elevate helps you stand up the business around it.",
+    ],
+  },
+  {
+    slug: "funding",
+    nav: "Links to funding",
+    menuBlurb: "Financing and funding options for new studios.",
+    eyebrow: "Resource",
+    title: "Funding your studio or business.",
+    intro:
+      "Opening a space, buying equipment, or hiring your first coach takes capital. Here's where to look — and how deload Elevate can point you in the right direction.",
+    body: [
+      "From small-business loans to equipment financing to studio-specific lenders, there are more options than most first-time owners realise.",
+      "Through deload Elevate we can connect you with financing partners and walk through what makes sense for your stage.",
+    ],
+  },
+  {
+    slug: "blog",
+    nav: "Blog",
+    menuBlurb: "Programming, business, and product notes.",
+    eyebrow: "Blog",
+    title: "The deload blog.",
+    intro:
+      "Notes on programming, running a coaching business, and what we're building. New posts as we publish them.",
+    comingSoon: true,
+  },
+  {
+    slug: "webinars",
+    nav: "Webinars",
+    menuBlurb: "Live and recorded sessions with the team.",
+    eyebrow: "Webinars",
+    title: "Webinars.",
+    intro:
+      "Live walkthroughs and recorded sessions on getting the most out of deload and growing your business. Schedule coming soon.",
+    comingSoon: true,
+  },
+  {
+    slug: "support",
+    nav: "Support + FAQ",
+    menuBlurb: "Answers, docs, and how to reach us.",
+    eyebrow: "Support",
+    title: "Support & FAQ.",
+    intro: "Common questions, plus how to reach a human when you need one.",
+  },
+];
+
+export function getResource(slug: string): ResourceEntry | undefined {
+  return RESOURCES.find((r) => r.slug === slug);
+}
+
+// ---------------------------------------------------------------------------
+// Pricing — Studio vs Individuals, led by the 7-day individual trial.
+// Prices are placeholders pending finalisation; clearly marked as such so
+// nothing wrong is published. Update `price`/`cadence` when numbers are final.
+// ---------------------------------------------------------------------------
+
+export interface PricingTier {
+  name: string;
+  price: string;
+  cadence?: string;
+  blurb: string;
+  cta: { label: string; href: string };
+  highlight?: boolean;
+  badge?: string;
+  features: string[];
+}
+
+export const PRICING: {
+  individuals: PricingTier[];
+  studio: PricingTier[];
+} = {
+  individuals: [
+    {
+      name: "Individual",
+      price: "$—",
+      cadence: "/mo",
+      blurb: "For the solo coach running their own roster.",
+      cta: { label: "Start 7-day free trial", href: "" },
+      features: [
+        "AI-assisted programming",
+        "Plain-English editing with full history",
+        "Athlete app + in-app messaging",
+        "Booking and built-in Stripe billing",
+        "7-day free trial — 1 client, 1 generation",
+      ],
+    },
+    {
+      name: "Individual Growth",
+      price: "$—",
+      cadence: "/mo",
+      blurb: "More athletes, automations, and check-ins.",
+      cta: { label: "Start 7-day free trial", href: "" },
+      highlight: true,
+      badge: "Most popular",
+      features: [
+        "Everything in Individual, plus…",
+        "Higher client and generation limits",
+        "Structured check-ins and advisories",
+        "Roster triage dashboard and reports",
+      ],
+    },
+    {
+      name: "Individual Suite",
+      price: "$—",
+      cadence: "/mo",
+      blurb: "The full individual toolkit at scale.",
+      cta: { label: "Book a demo", href: "/book-a-demo" },
+      features: [
+        "Everything in Growth, plus…",
+        "Highest client and generation limits",
+        "Priority support",
+        "Early access to new features",
+      ],
+    },
+  ],
+  studio: [
+    {
+      name: "Studio Core",
+      price: "Custom",
+      blurb: "Run your studio in one place with reporting and analytics.",
+      cta: { label: "Book a demo", href: "/book-a-demo" },
+      features: [
+        "Unlimited team members",
+        "Org-level defaults and shared protocols",
+        "Roster and schedule triage across the team",
+        "Built-in billing, booking, and reporting",
+      ],
+    },
+    {
+      name: "Studio Growth",
+      price: "Custom",
+      blurb: "Manage and grow your studio with automations.",
+      cta: { label: "Book a demo", href: "/book-a-demo" },
+      highlight: true,
+      badge: "Most popular",
+      features: [
+        "Everything in Core, plus…",
+        "Advanced automations and check-ins",
+        "Admin impersonation with audit log",
+        "Enterprise SSO and SCIM provisioning",
+      ],
+    },
+    {
+      name: "Studio Suite",
+      price: "Custom",
+      blurb: "All your studio needs: platform, branding, and an app.",
+      cta: { label: "Book a demo", href: "/book-a-demo" },
+      features: [
+        "Everything in Growth, plus…",
+        "White-label client portal and domain",
+        "Multi-location support",
+        "Dedicated onboarding and priority support",
+      ],
+    },
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// Home-page content blocks
+// ---------------------------------------------------------------------------
+
 export const pillars = [
   {
     eyebrow: "Build",
     title: "Programs that sound like you wrote them.",
-    body: "AI generation, plain-English edits, mesocycles \u00b7 deloads \u00b7 peaks, and a templates library you can pull from. RPE, RIR, and %1RM live inside the same block.",
+    body: "AI generation, plain-English edits, mesocycles · deloads · peaks, and a templates library you can pull from. RPE, RIR, and %1RM live inside the same block.",
   },
   {
     eyebrow: "Run",
@@ -40,11 +562,10 @@ export const pillars = [
   {
     eyebrow: "Ship",
     title: "An athlete app athletes actually open.",
-    body: "Today's session on the phone, fast logging with RPE and PRs, an in-app chat assistant for quick questions \u2014 and you stay the coach of record.",
+    body: "Today's session on the phone, fast logging with RPE and PRs, an in-app chat assistant for quick questions — and you stay the coach of record.",
   },
 ];
 
-// "What this absorbs for you" \u2014 the moments deload quietly takes off your plate.
 export const absorbed = [
   {
     when: "Sunday night",
@@ -56,7 +577,7 @@ export const absorbed = [
   },
   {
     when: "Thursday morning",
-    what: "Answering \u201Cwhat's my weight today?\u201D over text before the gym opens.",
+    what: "Answering “what's my weight today?” over text before the gym opens.",
   },
   {
     when: "Two weeks out from a meet",
@@ -64,130 +585,43 @@ export const absorbed = [
   },
 ];
 
-// Concrete capability bullets used on the home page "Built for real programming" block.
 export const proofPoints = [
-  "Powerlifting, weightlifting, hypertrophy, sport-specific \u2014 plus masters, HRT-aware, and post-surgical programming.",
-  "RPE, RIR, and %1RM \u2014 mix them inside the same block without breaking the math.",
+  "Powerlifting, weightlifting, hypertrophy, sport-specific — plus masters, HRT-aware, and post-surgical programming.",
+  "RPE, RIR, and %1RM — mix them inside the same block without breaking the math.",
   "Mesocycles, deloads, and peaks that match the athlete in front of you.",
   "Edit any session inline; downstream weeks adjust to match.",
   "Drag-and-drop days and exercises; bulk-edit across sessions.",
-  "Full edit history with one-click undo \u2014 you stay the coach of record.",
+  "Full edit history with one-click undo — you stay the coach of record.",
 ];
 
-// Full feature inventory, grouped by who uses it. Drives the /features page.
-export const featureGroups = [
-  {
-    eyebrow: "For the coach \u2014 programming",
-    title: "Write the block, then let the block write itself.",
-    body: "Generate a first draft from a plain-English brief, then refine in chat. Block-aware periodization, mixed intensity schemes, and a templates library you can pull from \u2014 not a workout-tracker pretending to coach.",
-    points: [
-      "AI program generation from a free-text brief \u2014 sport, level, equipment, constraints.",
-      "Chat-based refinement: \u201Cmake Wednesday upper-body focused,\u201D \u201Ccut volume 15% next week.\u201D",
-      "Density planning across heavy / accessory / deload / conditioning day roles.",
-      "Templates and protocols catalogue you can duplicate or apply as a block.",
-      "Mesocycles, deloads, peaks, and taper logic that matches the meet date.",
-    ],
-  },
-  {
-    eyebrow: "For the coach \u2014 editing",
-    title: "Plain-English edits that ripple.",
-    body: "Tell it the constraint \u2014 a tweaked back, a missed week, a meet that just moved \u2014 and the affected weeks rewrite themselves. The rest of the block stays exactly where you left it.",
-    points: [
-      "Inline grid for sets, reps, RPE, rest, tempo, and cues.",
-      "Same-family swaps and exercise substitutions keep the intent intact.",
-      "Drag-and-drop to reorder days or move exercises between sessions.",
-      "Multi-session bulk editing and week / day duplication.",
-      "Full edit history with one-click undo and revert.",
-    ],
-  },
-  {
-    eyebrow: "For the coach \u2014 roster",
-    title: "Triage the roster, don't refresh it.",
-    body: "A high-level view that surfaces who needs attention this week \u2014 by logging consistency, divergence from target, or sustained high RPE. Then deal with each athlete one click deep.",
-    points: [
-      "Roster dashboard with \u201CNeeds attention\u201D triage and headshots.",
-      "Per-athlete history: PRs, RPE trends, check-ins, edit log.",
-      "Automatic high-RPE advisories and target-divergence alerts.",
-      "Structured check-ins (in-app or email) that land in your inbox.",
-      "Per-athlete distance units \u2014 lbs / mi or kg / m \u2014 set once.",
-    ],
-  },
-  {
-    eyebrow: "For the coach \u2014 communication",
-    title: "Messaging that doesn't live in your texts.",
-    body: "Athletes message in-app. You see the session that triggered the question. The AI assistant handles the easy ones so you can spend your replies on the real conversations.",
-    points: [
-      "In-app inbox tied to the specific session or week in question.",
-      "Welcome-note automation when an athlete first joins.",
-      "Athlete-side AI assistant for \u201Cwhat's my weight today?\u201D-class questions.",
-      "Read receipts and unread badges that don't gamify you.",
-    ],
-  },
-  {
-    eyebrow: "For the athlete \u2014 mobile",
-    title: "An app athletes actually open.",
-    body: "Clean, quiet, built around the next set \u2014 not gamified streaks. Athletes see today's session, log it in seconds, and message you when something's off.",
-    points: [
-      "iOS and Android via the Deload mobile app.",
-      "Fast in-gym logging: sets, reps, weight, RPE \u2014 with automatic PR detection.",
-      "Today's session up top, with warm-up, main work, accessories, and cool-down clearly laid out.",
-      "Profile photo, common-lift trends, and a chat tab tied to their coach.",
-      "Auto-regulated targets based on the previous session's feel and performance.",
-    ],
-  },
-  {
-    eyebrow: "For the team",
-    title: "Org-ready when you're not the only coach.",
-    body: "Bring on additional coaches, share defaults across the team, and keep an audit trail of every admin action \u2014 without losing the per-coach voice the AI learned.",
-    points: [
-      "Invite coaches single or via CSV; track who's accepted.",
-      "Org-level defaults for automations and preferences \u2014 with per-coach overrides.",
-      "Admin impersonation for support, every action audit-logged.",
-      "Per-org branding and shared protocol library.",
-    ],
-  },
-  {
-    eyebrow: "Billing",
-    title: "Get paid without leaving the app.",
-    body: "Built-in Stripe billing for athlete packages \u2014 deposits, late-cancel fees, and automated charges \u2014 so the money side stops being a second tool.",
-    points: [
-      "Stripe-backed athlete packages and subscriptions.",
-      "Deposit capture and late-cancel fee automation.",
-      "Self-serve invoicing for one-off charges.",
-    ],
-  },
-  {
-    eyebrow: "Populations",
-    title: "Programming that respects who's in front of you.",
-    body: "Retrieval-backed protocols for the populations general tools quietly skip. The AI pulls the right protocol into the prompt so the program isn't generic.",
-    points: [
-      "Powerlifting, weightlifting, hypertrophy, and sport-specific prep.",
-      "Masters athletes, bone-density-aware programming, and fall-prevention GPP.",
-      "Trans athletes across the HRT spectrum (on / off / pre / post-surgical).",
-      "Hypogonadal men with or without TRT, including post-prostate-cancer cases.",
-    ],
-  },
-];
+// Testimonials are intentionally empty until we have real beta feedback to
+// quote. The UI falls back to a "coming soon" state when this is empty.
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+}
+export const testimonials: Testimonial[] = [];
 
 export const faqs = [
   {
     q: "Does it really sound like me?",
-    a: "It learns from how you actually write \u2014 your phrasing, your set/rep cadence, the cues you reach for. The first program is a starting point; it adapts as you edit.",
+    a: "It learns from how you actually write — your phrasing, your set/rep cadence, the cues you reach for. The first program is a starting point; it adapts as you edit.",
   },
   {
-    q: "What about athletes with quirks \u2014 meet preps, injuries, in-season volume cuts?",
+    q: "What about athletes with quirks — meet preps, injuries, in-season volume cuts?",
     a: "All of that is in scope. You tell it the constraint in plain English and it rebuilds the affected weeks; the rest of the block stays.",
   },
   {
     q: "What does the athlete actually see?",
-    a: "A clean mobile app with today's session, fast logging, and a chat tab tied to you. There's also an in-app AI assistant for quick questions so you're not answering \u201Cwhat's my weight today?\u201D at 7am.",
+    a: "A clean mobile app with today's session, fast logging, and a chat tab tied to you. There's also an in-app AI assistant for quick questions so you're not answering “what's my weight today?” at 7am.",
   },
   {
-    q: "Do I have to import my whole roster to try it?",
-    a: "No. Sign up, create one athlete, generate one block, and see whether the voice is right. No spreadsheet import, no setup call.",
+    q: "How does the free trial work?",
+    a: "Start a 7-day individual trial with no commitment. During the trial you can add one client and run one program generation, so you can see the voice for yourself. When you subscribe, your normal client and generation limits unlock.",
   },
   {
-    q: "What's the pricing?",
-    a: "Free during private beta \u2014 no card required. When public pricing lands you'll see it inside the app before anything is charged.",
+    q: "Can I move my roster over from another tool?",
+    a: "Yes. You can start with a single athlete to evaluate the voice, or migrate an existing client list — and deload Elevate can help if you're coming from Arketa, Jane, Mindbody, or a spreadsheet.",
   },
 ];

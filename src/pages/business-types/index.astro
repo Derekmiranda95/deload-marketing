@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { BUSINESS_TYPES } from "../../config";
+
+const base = import.meta.env.BASE_URL;
+const root = base.replace(/\/$/, "");
+---
+<Layout
+  title="Business types"
+  description="Whether you're a solo coach, opening a new business, running a single studio, scaling across locations, or white-labeling the platform — deload fits the way you work."
+>
+  <section class="px-6 pt-20 pb-12 md:pt-28">
+    <div class="mx-auto max-w-container">
+      <p class="text-sm uppercase tracking-[0.18em] text-ink/50">Business types</p>
+      <h1 class="mt-4 max-w-3xl text-balance text-4xl font-medium leading-[1.1] tracking-tight md:text-5xl">
+        From one coach to many locations.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink/70">
+        deload scales from a solo roster to a multi-location studio without changing tools. Find your starting point.
+      </p>
+    </div>
+  </section>
+
+  <section class="px-6 pb-24">
+    <div class="mx-auto grid max-w-container gap-px overflow-hidden rounded-2xl bg-ink/10 md:grid-cols-2">
+      {BUSINESS_TYPES.map((b) => (
+        <a href={`${root}/business-types/${b.slug}`} class="group block bg-bg p-8 transition-colors hover:bg-ink/[0.02]">
+          <p class="text-xs uppercase tracking-[0.16em] text-clay">{b.eyebrow}</p>
+          <p class="mt-2 text-xl font-medium tracking-tight text-ink group-hover:text-clay">{b.nav}</p>
+          <p class="mt-2 text-ink/65">{b.menuBlurb}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,37 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { RESOURCES } from "../../config";
+
+const base = import.meta.env.BASE_URL;
+const root = base.replace(/\/$/, "");
+---
+<Layout
+  title="Resources"
+  description="Guides on starting and funding your coaching business, plus the blog, webinars, and support — everything around running the business, not just the software."
+>
+  <section class="px-6 pt-20 pb-12 md:pt-28">
+    <div class="mx-auto max-w-container">
+      <p class="text-sm uppercase tracking-[0.18em] text-ink/50">Resources</p>
+      <h1 class="mt-4 max-w-3xl text-balance text-4xl font-medium leading-[1.1] tracking-tight md:text-5xl">
+        Help with the business, not just the software.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-ink/70">
+        Starting out, finding funding, or looking for answers — here's where to begin.
+      </p>
+    </div>
+  </section>
+
+  <section class="px-6 pb-24">
+    <div class="mx-auto grid max-w-container gap-px overflow-hidden rounded-2xl bg-ink/10 md:grid-cols-2 lg:grid-cols-3">
+      {RESOURCES.map((r) => (
+        <a href={`${root}/resources/${r.slug}`} class="group block bg-bg p-8 transition-colors hover:bg-ink/[0.02]">
+          <p class="flex items-center gap-2 text-xl font-medium tracking-tight text-ink group-hover:text-clay">
+            {r.nav}
+            {r.comingSoon && <span class="rounded-full bg-sage/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-sage">Soon</span>}
+          </p>
+          <p class="mt-2 text-ink/65">{r.menuBlurb}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
