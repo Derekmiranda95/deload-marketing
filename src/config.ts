@@ -15,7 +15,7 @@ export const TRIAL_URL = SIGN_UP_URL;
 export const TURNSTILE_SITE_KEY =
   (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined) ?? "";
 
-export const SITE_NAME = "deload";
+export const SITE_NAME = "Deload";
 
 // Repositioned per request: lead with "all-in-one" instead of "for serious coaches".
 export const SITE_TAGLINE = "The all-in-one AI coaching platform";
@@ -64,11 +64,11 @@ export const FEATURES: FeatureEntry[] = [
     eyebrow: "AI Programming",
     title: "The first true AI exercise-programming agent.",
     intro:
-      "Most “AI” fitness tools autocomplete a workout. deload runs a retrieval-augmented programming agent — it pulls the right protocol for the athlete in front of you into the prompt, then writes a block-aware program that respects periodization, intensity schemes, and the constraints you set. Not a template. Not a guess.",
+      "Most “AI” fitness tools autocomplete a workout. Deload writes a real, block-aware program for the athlete in front of you — periodization, intensity schemes, and the constraints you set. Not a template. Not a guess.",
     points: [
       "Generate a full first-draft block from a free-text brief — sport, level, equipment, training age, and constraints.",
-      "Retrieval-augmented generation (RAG): the agent grounds every program in a curated catalogue of real exercises, protocols, and reference programs — so it isn't inventing set/rep schemes.",
-      "Watch it work: live plan preview, per-block progress, and retrieval breadcrumbs as it writes.",
+      "Built on real programming principles, so it isn't inventing set/rep schemes.",
+      "Watch it work: a live plan preview and per-block progress as it writes.",
       "Block-aware periodization — mesocycles, deloads, peaks, and taper logic that match the meet or goal date.",
       "Mixed intensity prescription — RPE, RIR, and %1RM live inside the same block without breaking the math.",
       "Population-aware: powerlifting, weightlifting, hypertrophy, sport-specific, masters, HRT-aware, and post-surgical programming.",
@@ -82,7 +82,7 @@ export const FEATURES: FeatureEntry[] = [
     eyebrow: "Editing",
     title: "Plain-English edits that ripple through the block.",
     intro:
-      "Tell deload the constraint — a tweaked back, a missed week, a meet that just moved — and the affected weeks rewrite themselves. You see the before/after diff on every change, and the rest of the block stays exactly where you left it.",
+      "Tell Deload the constraint — a tweaked back, a missed week, a meet that just moved — and the affected weeks rewrite themselves. You see the before/after diff on every change, and the rest of the block stays exactly where you left it.",
     points: [
       "Chat-based refinement: “drop the deload,” “add RPE targets,” “make Wednesday upper-body focused.”",
       "Before/after diffs and structural change summaries on every AI edit.",
@@ -96,11 +96,11 @@ export const FEATURES: FeatureEntry[] = [
     slug: "populations",
     nav: "Population-specific protocols",
     status: "shipped",
-    menuBlurb: "Retrieval-backed protocols general tools quietly skip.",
+    menuBlurb: "Protocols general tools quietly skip.",
     eyebrow: "Populations",
     title: "Programming that respects who's actually in front of you.",
     intro:
-      "deload's retrieval layer pulls the right protocol into the prompt so the program isn't generic — including the populations most tools ignore.",
+      "Deload tailors the program to who's actually in front of you, so it isn't generic — including the populations most tools ignore.",
     points: [
       "Powerlifting, weightlifting, hypertrophy, and sport-specific prep.",
       "Masters athletes, bone-density-aware programming, and fall-prevention GPP.",
@@ -167,7 +167,7 @@ export const FEATURES: FeatureEntry[] = [
     intro:
       "Clean, quiet, built around the next set — not gamified streaks. Athletes see today's session, log it in seconds, and message you when something's off. You stay the coach of record.",
     points: [
-      "iOS and Android via the deload mobile app.",
+      "iOS and Android via the Deload mobile app.",
       "Fast in-gym logging: sets, reps, weight, RPE — with automatic PR detection.",
       "Modality-aware fields for runs, rows, intervals, and more — not just barbell work.",
       "Today's session up top, with warm-up, main work, accessories, and cool-down clearly laid out.",
@@ -247,7 +247,7 @@ export const FEATURES: FeatureEntry[] = [
     eyebrow: "White labeling",
     title: "Run the client experience under your own brand.",
     intro:
-      "Put your studio's name, logo, and colours on the athlete-facing experience — branded portal, branded emails, and your own domain, running on deload's engine underneath.",
+      "Put your studio's name, logo, and colours on the athlete-facing experience — branded portal, branded emails, and your own domain, running on Deload's engine underneath.",
     points: [
       "Custom logo, colours, and email sender name across client-facing surfaces.",
       "Map your own domain to the athlete portal with DNS validation.",
@@ -284,7 +284,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
     eyebrow: "Individual",
     title: "Everything a solo coach needs, without the spreadsheet stack.",
     intro:
-      "You write the programs, run the check-ins, and answer the texts. deload does the heavy lifting so one person can coach more athletes well — and still take Sunday night off.",
+      "You write the programs, run the check-ins, and answer the texts. Deload does the heavy lifting so one person can coach more athletes well — and still take Sunday night off.",
     points: [
       "AI-assisted programming so first drafts take minutes, not evenings.",
       "One roster, one inbox, one athlete app — no tool-switching.",
@@ -295,18 +295,18 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
   },
   {
     slug: "new-business",
-    nav: "New business (deload Elevate)",
+    nav: "New business (Deload Foundations)",
     menuBlurb: "Opening or just launched? Start here.",
     eyebrow: "New business",
     title: "Start your coaching business on the right foundation.",
     intro:
-      "Whether you're going independent for the first time or opening your first studio, deload Elevate pairs the platform with guidance on getting the business itself off the ground.",
+      "Whether you're going independent for the first time or opening your first studio, Deload Foundations pairs the platform with guidance on getting the business itself off the ground.",
     points: [
       "Set up programming, billing, and your athlete app on day one.",
       "Migrate an existing client list over from a spreadsheet or another tool.",
-      "Guidance on pricing, funding, and operations through deload Elevate.",
+      "Guidance on pricing, funding, and operations through Deload Foundations.",
     ],
-    cta: { label: "Explore deload Elevate", href: "/elevate" },
+    cta: { label: "Explore Deload Foundations", href: "/elevate" },
   },
   {
     slug: "small-enterprise",
@@ -315,7 +315,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
     eyebrow: "Small enterprise",
     title: "A small team that coaches like a big one.",
     intro:
-      "A handful of coaches, one shared standard. deload keeps everyone's programming consistent, every athlete accounted for, and the admin off your plate.",
+      "A handful of coaches, one shared standard. Deload keeps everyone's programming consistent, every athlete accounted for, and the admin off your plate.",
     points: [
       "Invite your coaches and share org-level defaults.",
       "One roster and schedule view across the whole team.",
@@ -330,7 +330,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
     eyebrow: "Large enterprise",
     title: "Multi-location, multi-coach, one source of truth.",
     intro:
-      "When you're running multiple locations and a large roster, consistency and oversight matter as much as speed. deload gives you org-wide defaults, an audit trail, enterprise SSO, and admin tooling that scales.",
+      "When you're running multiple locations and a large roster, consistency and oversight matter as much as speed. Deload gives you org-wide defaults, an audit trail, enterprise SSO, and admin tooling that scales.",
     points: [
       "Org-level defaults with per-location and per-coach overrides.",
       "Enterprise SSO (SAML / OIDC) and SCIM provisioning.",
@@ -344,9 +344,9 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
     nav: "White labeling",
     menuBlurb: "Your brand on the athlete experience.",
     eyebrow: "White labeling",
-    title: "Run deload under your own brand.",
+    title: "Run Deload under your own brand.",
     intro:
-      "For studios and platforms that want the deload engine behind their own brand — your name, logo, colours, and domain on the athlete portal and client emails today, with a fully branded native app on the way.",
+      "For studios and platforms that want the Deload engine behind their own brand — your name, logo, colours, and domain on the athlete portal and client emails today, with a fully branded native app on the way.",
     points: [
       "Branded athlete portal with custom logo and colours.",
       "Your own domain on the client-facing surfaces.",
@@ -387,7 +387,7 @@ export const RESOURCES: ResourceEntry[] = [
       "A practical guide to going from coaching on the side to running a business that pays you — pricing, packaging, your first clients, and the systems that keep it from eating your week.",
     body: [
       "Whether you're leaving a gym job or opening your first studio, the early decisions — how you price, how you package, how you get paid — set the ceiling on what comes next.",
-      "deload Elevate exists to help with exactly this. The platform handles the programming and admin; Elevate helps you stand up the business around it.",
+      "Deload Foundations exists to help with exactly this. The platform handles the programming and admin; Foundations helps you stand up the business around it.",
     ],
   },
   {
@@ -397,10 +397,10 @@ export const RESOURCES: ResourceEntry[] = [
     eyebrow: "Resource",
     title: "Funding your studio or business.",
     intro:
-      "Opening a space, buying equipment, or hiring your first coach takes capital. Here's where to look — and how deload Elevate can point you in the right direction.",
+      "Opening a space, buying equipment, or hiring your first coach takes capital. Here's where to look — and how Deload Foundations can point you in the right direction.",
     body: [
       "From small-business loans to equipment financing to studio-specific lenders, there are more options than most first-time owners realise.",
-      "Through deload Elevate we can connect you with financing partners and walk through what makes sense for your stage.",
+      "Through Deload Foundations we can connect you with financing partners and walk through what makes sense for your stage.",
     ],
   },
   {
@@ -408,7 +408,7 @@ export const RESOURCES: ResourceEntry[] = [
     nav: "Blog",
     menuBlurb: "Programming, business, and product notes.",
     eyebrow: "Blog",
-    title: "The deload blog.",
+    title: "The Deload blog.",
     intro:
       "Notes on programming, running a coaching business, and what we're building. New posts as we publish them.",
     comingSoon: true,
@@ -420,7 +420,7 @@ export const RESOURCES: ResourceEntry[] = [
     eyebrow: "Webinars",
     title: "Webinars.",
     intro:
-      "Live walkthroughs and recorded sessions on getting the most out of deload and growing your business. Schedule coming soon.",
+      "Live walkthroughs and recorded sessions on getting the most out of Deload and growing your business. Schedule coming soon.",
     comingSoon: true,
   },
   {
@@ -622,6 +622,6 @@ export const faqs = [
   },
   {
     q: "Can I move my roster over from another tool?",
-    a: "Yes. You can start with a single athlete to evaluate the voice, or migrate an existing client list — and deload Elevate can help if you're coming from Arketa, Jane, Mindbody, or a spreadsheet.",
+    a: "Yes. You can start with a single athlete to evaluate the voice, or migrate an existing client list — and Deload Foundations can help if you're coming from Arketa, Jane, Mindbody, or a spreadsheet.",
   },
 ];

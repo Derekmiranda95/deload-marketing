@@ -24,8 +24,8 @@ const {
 const base = import.meta.env.BASE_URL;
 const root = base.replace(/\/$/, "");
 const fullTitle = title === "deload"
-  ? `deload — ${SITE_TAGLINE}`
-  : `${title} — deload`;
+  ? `Deload — ${SITE_TAGLINE}`
+  : `${title} — Deload`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
 const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).toString();
 ---
