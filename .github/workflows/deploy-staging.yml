@@ -1,0 +1,23 @@
+name: Deploy Staging Marketing
+
+on:
+  push:
+    branches: [ staging ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/deload/deload-marketing
+            git pull origin staging
+            pnpm install
+            pnpm run build
+            sudo chmod -R 755 ~/deload/deload-marketing/dist
+            sudo systemctl restart nginx

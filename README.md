@@ -6,17 +6,23 @@ imports. It must remain deployable on its own.
 
 ## Run locally
 
-Inside Replit, this artifact runs as the `deload-marketing` workflow at
-`/deload-marketing/`. Manually:
+Standalone Astro project — install once, then run the dev server:
 
 ```sh
-pnpm --filter @workspace/deload-marketing run dev
+pnpm install
+pnpm run dev
 ```
 
 Production build:
 
 ```sh
-pnpm --filter @workspace/deload-marketing run build
+pnpm run build
+```
+
+Type-check:
+
+```sh
+pnpm run typecheck
 ```
 
 ## Routes
@@ -51,18 +57,24 @@ A sitemap is produced at build time (`/sitemap-index.xml`) by
 `PUBLIC_APP_URL` and `PUBLIC_SITE_URL` must be `PUBLIC_`-prefixed so Astro
 exposes them to client-rendered components.
 
-## Deploy plan (future task)
+## Deploy
 
-This artifact will be split into its own GitHub repo (`deload-marketing`)
-and deployed to Vercel against the `deloadapp.io` apex. We intentionally
-do **not** ship a `vercel.json` here — that lands in the deploy follow-up
-task once the site is reviewed. When the site moves to Vercel, set
-`PUBLIC_APP_URL` and `PUBLIC_SITE_URL` in the Vercel project settings;
-nothing in the source needs to change.
+This repo is the source of truth for the `deloadapp.io` marketing site. It
+deploys to EC2 the same way `deload-coach-ui` does:
 
-## What lives outside this artifact
+- Pushing to `main` triggers `.github/workflows/deploy.yml`, which SSHes into
+  the production box, pulls, runs `pnpm install` + `pnpm run build`, and
+  reloads Nginx to serve the new `dist/`.
+- Pushing to `staging` triggers `.github/workflows/deploy-staging.yml` against
+  the staging box.
 
-- The product itself (signed-in coach + athlete experience) lives in
-  `artifacts/coach-ui`, `artifacts/athlete-ui`, and `artifacts/deload-mobile`.
-  This site links **out** to the product via `PUBLIC_APP_URL`; it never
-  imports from those packages.
+Nginx serves the static `dist/` output directly. Set `PUBLIC_APP_URL` and
+`PUBLIC_SITE_URL` in the environment if the defaults ever need to change;
+nothing in the source needs editing.
+
+## What lives outside this repo
+
+- The product itself (signed-in coach + athlete experience) lives in the
+  `deload-coach-ui`, `deload-athlete-ui`, and `deload-mobile` repos. This site
+  links **out** to the product via `PUBLIC_APP_URL`; it never imports from
+  those packages.
