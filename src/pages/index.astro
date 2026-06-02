@@ -12,12 +12,17 @@ const description = SITE_DESCRIPTION;
       <p class="mb-6 text-sm uppercase tracking-[0.18em] text-ink/50">
         The all-in-one AI coaching platform
       </p>
-      <h1 class="max-w-3xl text-balance text-4xl font-medium leading-[1.05] tracking-tight text-ink md:text-6xl">
-        Give your <span
-          id="hero-noun"
-          data-nouns="athletes,clients,patients"
-          class="text-sage"
-        >athletes</span> the program they deserve &mdash; without losing your Sunday night.
+      <h1 class="max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-ink md:text-6xl">
+        Give your <span class="inline-grid text-sage">
+          <span class="invisible col-start-1 row-start-1" aria-hidden="true">athletes</span>
+          <span class="invisible col-start-1 row-start-1" aria-hidden="true">patients</span>
+          <span class="invisible col-start-1 row-start-1" aria-hidden="true">clients</span>
+          <span
+            id="hero-noun"
+            data-nouns="athletes,clients,patients"
+            class="col-start-1 row-start-1"
+          >athletes</span>
+        </span> the program they deserve &mdash; without losing your Sunday night.
       </h1>
       <p class="mt-6 max-w-2xl text-lg text-ink/70 md:text-xl">
         Deload writes block-aware training in your voice, edits with you in plain English, runs your roster, and ships the program straight to your athletes' phones &mdash; so you can keep the relationship and skip the spreadsheet.
@@ -49,9 +54,9 @@ const description = SITE_DESCRIPTION;
           Programming, roster, athlete app &mdash; in the same window.
         </p>
       </div>
-      <ul class="grid gap-px overflow-hidden rounded-2xl bg-ink/10 md:grid-cols-3">
+      <ul class="grid gap-6 md:grid-cols-3">
         {pillars.map((p) => (
-          <li class="bg-bg p-7 md:p-8">
+          <li class="rounded-2xl border border-ink/10 bg-bg p-7 md:p-8">
             <p class="text-xs uppercase tracking-[0.16em] text-sage">{p.eyebrow}</p>
             <p class="mt-3 text-xl font-medium tracking-tight text-ink">{p.title}</p>
             <p class="mt-3 text-ink/70">{p.body}</p>
@@ -72,9 +77,9 @@ const description = SITE_DESCRIPTION;
           The hours that don't show up on a roster.
         </p>
       </div>
-      <ul class="grid gap-px overflow-hidden rounded-2xl bg-ink/10 md:grid-cols-2">
+      <ul class="grid gap-6 md:grid-cols-2">
         {absorbed.map((item) => (
-          <li class="bg-bg p-7 md:p-8">
+          <li class="rounded-2xl border border-ink/10 bg-bg p-7 md:p-8">
             <p class="text-xs uppercase tracking-[0.16em] text-sage">
               {item.when}
             </p>
