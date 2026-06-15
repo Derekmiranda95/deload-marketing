@@ -70,7 +70,10 @@ const legal = [
       <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink/40">Business types</p>
       <ul class="space-y-2.5 text-sm text-ink/65">
         {BUSINESS_TYPES.map((b) => (
-          <li><a class="transition-colors hover:text-ink" href={link(`/business-types/${b.slug}`)}>{b.nav}</a></li>
+          <li>
+            <a class="transition-colors hover:text-ink" href={link(`/business-types/${b.slug}`)}>{b.nav}</a>
+            {b.comingSoon && <span class="ml-1.5 text-[10px] uppercase tracking-wide text-sage">Coming soon</span>}
+          </li>
         ))}
       </ul>
     </div>

@@ -38,6 +38,12 @@ const resolveHref = (href: string) =>
     <div class="mx-auto max-w-container">
       {(["individuals", "studio"] as const).map((plan) => (
         <div class="plan-panel" data-panel={plan} hidden={plan !== "individuals"}>
+          {plan === "studio" && (
+            <div class="mb-6 rounded-2xl border border-sage/30 bg-sage/5 px-5 py-4 text-center text-sm text-ink/70">
+              <span class="font-semibold uppercase tracking-wide text-sage">Coming soon</span>
+              <span class="ml-2">Studio &amp; multi-location plans launch once our first coaches are live. <a href={`${root}/book-a-demo`} class="underline underline-offset-4 hover:text-ink">Book a demo</a> to get early access.</span>
+            </div>
+          )}
           <div class="grid gap-6 md:grid-cols-3">
             {PRICING[plan].map((tier) => (
               <div class={`relative flex flex-col rounded-2xl border bg-bg p-7 md:p-8 ${tier.highlight ? "border-ink shadow-xl shadow-ink/5" : "border-ink/10"}`}>
