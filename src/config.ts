@@ -273,6 +273,9 @@ export interface BusinessTypeEntry {
   title: string;
   intro: string;
   points: string[];
+  // Built, but intentionally held back at launch — surfaced as "Coming soon"
+  // everywhere this tier appears (nav, footer, pricing, detail page).
+  comingSoon?: boolean;
   cta?: { label: string; href: string };
 }
 
@@ -295,7 +298,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
   },
   {
     slug: "new-business",
-    nav: "New business (Deload Foundations)",
+    nav: "Deload Foundations - NewBiz",
     menuBlurb: "Opening or just launched? Start here.",
     eyebrow: "New business",
     title: "Start your coaching business on the right foundation.",
@@ -322,6 +325,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
       "Shared protocol library so the bar stays high.",
       "Per-coach voice preserved by the AI, even on shared standards.",
     ],
+    comingSoon: true,
   },
   {
     slug: "large-enterprise",
@@ -337,6 +341,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
       "Admin impersonation for support, every action audit-logged.",
       "Roster and schedule triage across every location from one dashboard.",
     ],
+    comingSoon: true,
     cta: { label: "Book a demo", href: "/book-a-demo" },
   },
   {
@@ -353,6 +358,7 @@ export const BUSINESS_TYPES: BusinessTypeEntry[] = [
       "Branded client emails and check-ins.",
       "Branded native mobile app coming soon.",
     ],
+    comingSoon: true,
     cta: { label: "Talk to us", href: "/book-a-demo" },
   },
 ];
