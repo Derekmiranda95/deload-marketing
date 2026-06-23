@@ -14,8 +14,9 @@ const check = `<svg class="h-4 w-4" ${svgAttrs}><path d="M20 6 9 17l-5-5"/></svg
 ---
 <Layout
   title="Join the Deload beta"
-  description="Be among the first coaches on Deload — the all-in-one AI coaching platform. Generate block-aware programs, run your roster, and ship to your athletes' phones. Two fields to join the beta."
+  description="Be among the first coaches on Deload — the all-in-one AI coaching platform. Generate block-aware programs with simple AI chat, manage your clients, and ship to your athletes' phones."
   minimalNav={true}
+  hideHeaderCtas={true}
 >
   <!-- Hero: pitch (left) + simple sign-up (right) -->
   <section class="px-6 pt-14 pb-16 md:pt-20">
@@ -30,9 +31,8 @@ const check = `<svg class="h-4 w-4" ${svgAttrs}><path d="M20 6 9 17l-5-5"/></svg
           Coach more. Lose fewer evenings.
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink/80 md:text-xl">
-          Deload is the all-in-one AI coaching platform. Generate block-aware programs in your
-          voice, edit in plain English, run your roster, and ship straight to your athletes' phones
-          — all in one place. Join the beta and we'll get you set up.
+          Deload is the all-in-one AI coaching platform. Generate block-aware programs with
+          simple AI chat, manage your clients, and ship straight to your athletes' phones.
         </p>
         <ul class="mt-7 grid gap-2.5 sm:grid-cols-3">
           {betaPerks.map((perk) => (
@@ -48,7 +48,7 @@ const check = `<svg class="h-4 w-4" ${svgAttrs}><path d="M20 6 9 17l-5-5"/></svg
       <div class="lg:pt-2">
         <div class="mb-4">
           <h2 class="text-2xl font-medium tracking-tight text-ink">Get early access</h2>
-          <p class="mt-1 text-sm text-ink/70">Two fields, no credit card — we'll email you an invite.</p>
+          <p class="mt-1 text-sm text-ink/70">No credit card required.</p>
         </div>
         <LeadForm id="beta-form" minimal={true} submitLabel="Join the beta" topic="beta" />
       </div>
