@@ -12,6 +12,9 @@ interface Props {
   // Landing/ad pages use a stripped header (logo + "More info") instead of the
   // full mega-nav, so the only ways out are the logo and the More-info button.
   minimalNav?: boolean;
+  // Focused conversion pages (e.g. the beta signup) drop the header CTAs so the
+  // page's own form is the only call to action; the logo remains the way out.
+  hideHeaderCtas?: boolean;
 }
 
 const {
@@ -19,6 +22,7 @@ const {
   description = SITE_DESCRIPTION,
   ogImage = "/og-default.png",
   minimalNav = false,
+  hideHeaderCtas = false,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
@@ -61,10 +65,12 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).toString();
           <a href={`${root}/`} class="text-ink hover:opacity-80" aria-label="deload home">
             <Wordmark class="text-base" />
           </a>
-          <div class="flex items-center gap-2">
-            <a href={`${root}/`} class="rounded-full border border-ink/20 px-4 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition-colors hover:bg-ink/5">More info</a>
-            <a href={TRIAL_URL} class="rounded-full bg-ink px-4 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-bg transition-colors hover:bg-ink/90">Try for free</a>
-          </div>
+          {!hideHeaderCtas && (
+            <div class="flex items-center gap-2">
+              <a href={`${root}/`} class="rounded-full border border-ink/20 px-4 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition-colors hover:bg-ink/5">More info</a>
+              <a href={TRIAL_URL} class="rounded-full bg-ink px-4 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-bg transition-colors hover:bg-ink/90">Try for free</a>
+            </div>
+          )}
         </div>
       </header>
     ) : (
