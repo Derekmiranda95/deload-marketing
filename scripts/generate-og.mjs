@@ -21,7 +21,7 @@ const PUBLIC_DIR = resolve(__dirname, "..", "public");
 
 // Brand tokens — kept in sync with tailwind.config.mjs.
 const C = {
-  bg: "#F7F4EE",
+  bg: "#FFFFFF",
   ink: "#14161A",
   sage: "#6B8E6F",
   clay: "#B8724A",
