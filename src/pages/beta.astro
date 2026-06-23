@@ -3,44 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import LeadForm from "../components/LeadForm.astro";
 import Testimonials from "../components/Testimonials.astro";
 
-// "Requirements made visual" — the core of what Deload does, shown as icon
-// cards instead of a plain bullet list. Kept tight and beta-focused: lead with
-// the AI hook, then the all-in-one pitch.
-const valueProps = [
-  {
-    icon: "spark",
-    title: "AI program generation",
-    body: "Describe the athlete in plain English and get a real, block-aware program back in minutes — periodization and intensity schemes, not a template.",
-  },
-  {
-    icon: "layers",
-    title: "All-in-one, not 3–4 tools",
-    body: "Programming, roster, messaging, check-ins, booking, and billing in one place — so you can retire the stack you're juggling today.",
-  },
-  {
-    icon: "chat",
-    title: "Plain-English editing",
-    body: "Tweak any block by typing the change. Downstream weeks adjust to match, with a before/after diff on every edit.",
-  },
-  {
-    icon: "phone",
-    title: "An app athletes open",
-    body: "Ship the program straight to your athletes' phones — fast logging, automatic PRs, and in-app chat on iOS and Android.",
-  },
-];
-
-// Inline icons (lucide-style strokes) so the cards stay self-contained.
-const icons: Record<string, string> = {
-  spark:
-    '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>',
-  layers:
-    '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
-  chat:
-    '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-  phone:
-    '<rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>',
-};
-
 const betaPerks = [
   "Early access to the full platform",
   "A direct line to the founder",
@@ -91,29 +53,6 @@ const check = `<svg class="h-4 w-4" ${svgAttrs}><path d="M20 6 9 17l-5-5"/></svg
         </div>
         <LeadForm id="beta-form" minimal={true} submitLabel="Join the beta" topic="beta" />
       </div>
-    </div>
-  </section>
-
-  <!-- Visual "requirements": what you get, as icon cards -->
-  <section class="border-t border-ink/10 px-6 py-16 md:py-20">
-    <div class="mx-auto max-w-container">
-      <div class="mb-10 max-w-2xl">
-        <h2 class="text-sm font-semibold uppercase tracking-[0.18em] text-sage">What you get</h2>
-        <p class="mt-3 text-3xl font-medium tracking-tight text-ink md:text-4xl">
-          One platform that does the whole job.
-        </p>
-      </div>
-      <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {valueProps.map((v) => (
-          <li class="rounded-2xl border border-ink/10 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
-            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sage/10 text-sage">
-              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={icons[v.icon]} />
-            </span>
-            <p class="mt-4 text-lg font-medium tracking-tight text-ink">{v.title}</p>
-            <p class="mt-2 text-sm leading-relaxed text-ink/70">{v.body}</p>
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
