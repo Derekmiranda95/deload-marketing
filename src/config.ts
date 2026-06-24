@@ -609,6 +609,85 @@ export interface Testimonial {
 }
 export const testimonials: Testimonial[] = [];
 
+// ---------------------------------------------------------------------------
+// Beta signup pipeline (private beta) — wires to deload-backend's
+// routes/public-beta.ts. The marketing /beta page captures here.
+// ---------------------------------------------------------------------------
+
+const trimmedApiBase = API_BASE_URL.replace(/\/+$/, "");
+
+// Public capture endpoint.
+export const BETA_SIGNUP_ENDPOINT = `${trimmedApiBase}/api/public/beta-signup`;
+
+// One-click news/marketing opt-in, built per-signup from the token the
+// capture endpoint returns.
+export function betaSubscribeUrl(publicToken: string): string {
+  return `${trimmedApiBase}/api/public/beta/subscribe/${encodeURIComponent(publicToken)}`;
+}
+
+// Roster-size + coaching-type qualifiers. The `value`s MUST stay in lockstep
+// with the backend enums (deload-shared BETA_ROSTER_BUCKETS /
+// BETA_COACHING_TYPES) — the server drops anything it doesn't recognise.
+export const BETA_ROSTER_OPTIONS = [
+  { value: "1-5", label: "1–5 athletes" },
+  { value: "6-20", label: "6–20 athletes" },
+  { value: "21-50", label: "21–50 athletes" },
+  { value: "51-150", label: "51–150 athletes" },
+  { value: "150+", label: "150+ athletes" },
+] as const;
+
+export const BETA_COACHING_TYPE_OPTIONS = [
+  { value: "online", label: "Online / remote" },
+  { value: "in_person", label: "In person" },
+  { value: "hybrid", label: "Hybrid (online + in person)" },
+  { value: "gym_studio", label: "Gym / studio" },
+  { value: "other", label: "Other" },
+] as const;
+
+// Personal/free email providers. CLIENT-SIDE HINT ONLY — the soft filter is
+// authoritative on the server. We use this to gently nudge toward a work
+// email; we never block a submission. Keep roughly in sync with the backend
+// denylist in deload-backend/src/lib/freeEmailDomains.ts.
+export const FREE_EMAIL_DOMAINS_HINT = [
+  "gmail.com",
+  "googlemail.com",
+  "outlook.com",
+  "hotmail.com",
+  "live.com",
+  "yahoo.com",
+  "ymail.com",
+  "icloud.com",
+  "me.com",
+  "aol.com",
+  "proton.me",
+  "protonmail.com",
+];
+
+// ---------------------------------------------------------------------------
+// Social links — FILL IN YOUR REAL HANDLES. Rendered on the beta success
+// screen (and the footer). Entries with an empty `href` are skipped, so it's
+// safe to leave a platform blank until you have it. This is the single place
+// to edit them.
+// ---------------------------------------------------------------------------
+export interface SocialLink {
+  label: string;
+  href: string;
+  handle?: string;
+}
+
+export const SOCIALS: SocialLink[] = [
+  { label: "Instagram", href: "" /* https://instagram.com/… */ },
+  { label: "X", href: "" /* https://x.com/… */ },
+  { label: "LinkedIn", href: "" /* https://linkedin.com/company/… */ },
+  { label: "TikTok", href: "" /* https://tiktok.com/@… */ },
+  { label: "YouTube", href: "" /* https://youtube.com/@… */ },
+];
+
+// Only the social links you've actually filled in.
+export const ACTIVE_SOCIALS: SocialLink[] = SOCIALS.filter(
+  (s) => s.href.trim().length > 0,
+);
+
 export const faqs = [
   {
     q: "Does it really sound like me?",
